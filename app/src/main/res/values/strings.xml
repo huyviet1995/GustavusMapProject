@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">GustavusMapProject</string>
+    <string name="title_activity_main">Map</string>
+    <string name="campus_center">Campus Center</string>
+    <string name="lund_center">Lund Center</string>
+    <string name="library">Library</string>
+</resources>
