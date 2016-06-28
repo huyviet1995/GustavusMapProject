@@ -49,20 +49,6 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback,Go
 
     private static final LatLng Gustavus = new LatLng(44.323286, -93.971139);
 
-    private static final PolygonOptions CampusCenterBound = new PolygonOptions()
-            .add(new LatLng(44.324745, -93.970942))
-            .add(new LatLng(44.324505, -93.971138))
-            .add(new LatLng(44.324547, -93.971275))
-            .add(new LatLng(44.324457, -93.971331))
-            .add(new LatLng(44.324296, -93.971063))
-            .add(new LatLng(44.324171, -93.971154))
-            .add(new LatLng(44.324117, -93.971054))
-            .add(new LatLng(44.323868, -93.971247))
-            .add(new LatLng(44.323711, -93.970861))
-            .add(new LatLng(44.324454, -93.970335))
-            .add(new LatLng(44.324745, -93.970942))
-            .clickable(true)
-            .visible(false);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -131,6 +117,8 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback,Go
         if (mMap == null)
             return;
         changeCamera(CameraUpdateFactory.newLatLngZoom(CampusCenter,18f));
+        /*Pop up the marker of the campus center*/
+        mMap.addMarker(new BuildingLocationData(BuildingLocationData.Place.CAMPUSCENTER).buildingLocation());
     }
 
     public void showLundCenter(View v) {
@@ -139,6 +127,7 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback,Go
             return;
         }
         changeCamera(CameraUpdateFactory.newLatLngZoom(LundCenter,18f));
+        /*Pop up the marker and the info window of the Lund Center*/
     }
 
     public void showLibrary(View v) {
@@ -148,9 +137,9 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback,Go
         }
         changeCamera(CameraUpdateFactory.newLatLngZoom(Library,18f));
     }
-
+    /*Bound the camous center*/
     private void boundCampusCenter() {
-        mMap.addPolygon(CampusCenterBound);
+        mMap.addPolygon(new BuildingLocationData(BuildingLocationData.Place.CAMPUSCENTER).locationDetails());
     }
     private boolean checkReady() {
         if (mMap == null) {

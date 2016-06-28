@@ -7,4 +7,5 @@
     <string name="PERMISSION_DENIED">The permission is denied</string>
     <string name="ok">OK</string>
     <string name="permission_request">Allow us to access your location</string>
+    <string name="no_location_show">There is no location to show</string>
 </resources>
