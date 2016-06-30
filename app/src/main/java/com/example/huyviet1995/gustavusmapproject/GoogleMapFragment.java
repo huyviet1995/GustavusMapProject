@@ -19,11 +19,14 @@ import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowCloseListener;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -31,7 +34,14 @@ import com.google.android.gms.maps.model.PolylineOptions;
 /**
  * Created by huyviet1995 on 6/22/16.
  */
-public class GoogleMapFragment extends Fragment implements OnMapReadyCallback,GoogleMap.OnMyLocationButtonClickListener,ActivityCompat.OnRequestPermissionsResultCallback {
+public class GoogleMapFragment extends Fragment implements
+        GoogleMap.OnMarkerClickListener,
+        OnMapReadyCallback,
+        GoogleMap.OnMyLocationButtonClickListener,
+        ActivityCompat.OnRequestPermissionsResultCallback,
+        GoogleMap.OnInfoWindowClickListener,
+        OnInfoWindowCloseListener
+        {
 
     private GoogleMap mMap;
 
@@ -73,6 +83,10 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback,Go
         TextView mCampusCenter = (TextView) v.findViewById(R.id.campus_center);
         TextView mLibrary = (TextView) v.findViewById(R.id.library);
         TextView mLundCenter = (TextView) v.findViewById(R.id.lund_center);
+        /*Set everything on fire*/
+
+        mMap.setOnMarkerClickListener(this);
+        mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(getActivity()));
         mCampusCenter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -103,6 +117,9 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback,Go
                 showLundCenter(view);
             }
         });
+
+        /*Set the adapter of the info windows*/
+
         return v;
     }
 
@@ -118,7 +135,8 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback,Go
             return;
         changeCamera(CameraUpdateFactory.newLatLngZoom(CampusCenter,18f));
         /*Pop up the marker of the campus center*/
-        mMap.addMarker(new BuildingLocationData(BuildingLocationData.Place.CAMPUSCENTER).buildingLocation());
+        mMap.addMarker(new BuildingLocationData(BuildingLocationData.Place.CAMPUSCENTER).buildingLocation())
+                .showInfoWindow();
     }
 
     public void showLundCenter(View v) {
@@ -128,6 +146,8 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback,Go
         }
         changeCamera(CameraUpdateFactory.newLatLngZoom(LundCenter,18f));
         /*Pop up the marker and the info window of the Lund Center*/
+        mMap.addMarker(new BuildingLocationData(BuildingLocationData.Place.LUNDCENTER).buildingLocation())
+                .showInfoWindow();
     }
 
     public void showLibrary(View v) {
@@ -184,6 +204,20 @@ public class GoogleMapFragment extends Fragment implements OnMapReadyCallback,Go
 
     @Override
     public boolean onMyLocationButtonClick() {
+        return false;
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        Toast.makeText(getActivity(),"Click info windows",Toast.LENGTH_SHORT).show();
+    }
+    @Override
+    public void onInfoWindowClose(Marker marker) {
+        Toast.makeText(getActivity(),"Click content windows",Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
         return false;
     }
 }

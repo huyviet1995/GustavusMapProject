@@ -28,8 +28,15 @@ public class BuildingLocationData {
         switch (mPlace) {
             case CAMPUSCENTER:
                 buildingLocation = new MarkerOptions()
-                        .position(new LatLng(44.324296, -93.970790))
-                        .title("Campus Center");
+                        .position(new LatLng(44.324272, -93.970848))
+                        .title("Campus Center")
+                        .snippet("The center building of Gustavus");
+                break;
+            case LUNDCENTER:
+                buildingLocation = new MarkerOptions()
+                        .position(new LatLng(44.325231, -93.971913))
+                        .title("Lund Center")
+                        .snippet("The place to work out");
                 break;
         }
         return buildingLocation;
@@ -55,7 +62,6 @@ public class BuildingLocationData {
                 break;
             default:
                 break;
-
         }
         return polygonPositions;
     }
