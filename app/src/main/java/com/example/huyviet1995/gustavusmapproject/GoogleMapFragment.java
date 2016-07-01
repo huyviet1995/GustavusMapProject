@@ -24,6 +24,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -80,6 +81,9 @@ public class GoogleMapFragment extends Fragment implements
         mMap = mMapView.getMap();
         mMap.setOnMyLocationButtonClickListener(this);
         enableMyLocation();
+        /*Tilt the camera on current position*/
+        tiltCamera();
+
         TextView mCampusCenter = (TextView) v.findViewById(R.id.campus_center);
         TextView mLibrary = (TextView) v.findViewById(R.id.library);
         TextView mLundCenter = (TextView) v.findViewById(R.id.lund_center);
@@ -123,6 +127,14 @@ public class GoogleMapFragment extends Fragment implements
         return v;
     }
 
+    public void tiltCamera() {
+        if (!checkReady()) return;
+        CameraPosition currentPosition = mMap.getCameraPosition();
+        float currentTilt = currentPosition.tilt;
+        CameraPosition cameraPosition = new CameraPosition.Builder(currentPosition).tilt(45).build();
+        changeCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+    }
+
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         /*Enable the location of the user on the map*/
@@ -160,6 +172,8 @@ public class GoogleMapFragment extends Fragment implements
     /*Bound the camous center*/
     private void boundCampusCenter() {
         mMap.addPolygon(new BuildingLocationData(BuildingLocationData.Place.CAMPUSCENTER).locationDetails());
+        mMap.addPolygon(new BuildingLocationData(BuildingLocationData.Place.CAMPUSCENTERROOF).locationDetails());
+        mMap.addPolygon(new BuildingLocationData(BuildingLocationData.Place.CAMPUSCENTERWALLS).locationDetails());
     }
     private boolean checkReady() {
         if (mMap == null) {
